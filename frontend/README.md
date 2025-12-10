@@ -56,3 +56,60 @@ VITE_API_URL=http://localhost:5000/api
 
 Note: In Vite, environment variables must be prefixed with `VITE_` to be exposed to the client code.
 
+## Deployment to Vercel
+
+### Option 1: Deploy via Vercel CLI
+
+1. Install Vercel CLI (if not already installed):
+```bash
+npm i -g vercel
+```
+
+2. Navigate to the frontend directory:
+```bash
+cd frontend
+```
+
+3. Deploy:
+```bash
+vercel
+```
+
+4. Follow the prompts to set up your project.
+
+5. Add environment variable for your backend API URL:
+   - Go to your project settings on Vercel dashboard
+   - Navigate to "Environment Variables"
+   - Add `VITE_API_URL` with your backend API URL (e.g., `https://your-backend.vercel.app/api` or your deployed backend URL)
+
+6. Redeploy for the environment variable to take effect.
+
+### Option 2: Deploy via Vercel Dashboard
+
+1. Push your code to GitHub, GitLab, or Bitbucket.
+
+2. Go to [Vercel](https://vercel.com) and sign in.
+
+3. Click "New Project" and import your repository.
+
+4. Configure the project:
+   - **Framework Preset**: Vite
+   - **Root Directory**: `frontend` (if your repo contains both frontend and backend)
+   - **Build Command**: `npm run build` (should auto-detect)
+   - **Output Directory**: `dist` (should auto-detect)
+   - **Install Command**: `npm install` (should auto-detect)
+
+5. Add environment variable:
+   - In the "Environment Variables" section, add:
+     - Name: `VITE_API_URL`
+     - Value: Your backend API URL (e.g., `https://your-backend.vercel.app/api`)
+
+6. Click "Deploy".
+
+### Important Notes:
+
+- Make sure your backend API is deployed and accessible (on Vercel, Railway, Render, etc.)
+- Update the `VITE_API_URL` environment variable in Vercel to point to your deployed backend
+- The frontend will use `/api` as the default if `VITE_API_URL` is not set, which requires the backend to be on the same domain
+- If your backend is on a different domain, you must set `VITE_API_URL` to the full backend URL
+

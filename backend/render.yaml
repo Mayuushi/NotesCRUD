@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: notes-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB_NAME
+        sync: false
+      - key: PORT
+        fromService:
+          type: web
+          name: notes-backend
+          property: port
+

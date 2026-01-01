@@ -65,13 +65,14 @@
 }
 
 .btn-submit {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3498db, #2980b9);
   color: white;
 }
 
 .btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2980b9, #21618c);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
 }
 
 .btn-submit:disabled {
@@ -80,12 +81,14 @@
 }
 
 .btn-cancel {
-  background: #f5f5f5;
-  color: #666;
+  background: #ecf0f1;
+  color: #7f8c8d;
+  border: 1px solid #bdc3c7;
 }
 
 .btn-cancel:hover:not(:disabled) {
-  background: #e0e0e0;
+  background: #d5dbdb;
+  border-color: #95a5a6;
 }
 
 @media (max-width: 768px) {

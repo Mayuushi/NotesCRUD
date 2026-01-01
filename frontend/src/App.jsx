@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import './components/Sidebar.css';
+import Sidebar from './components/Sidebar';
 import NoteCard from './components/NoteCard';
 import NoteForm from './components/NoteForm';
 import Login from './components/Login';
@@ -131,44 +133,46 @@ function App() {
 
   return (
     <div className="App">
-      <div className="container">
-        <header className="app-header">
-          <h1>📝 My Notes</h1>
-          <p>Keep your thoughts organized</p>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
-        </header>
+      <Sidebar onLogout={handleLogout} />
+      <div className="main-content">
+        <div className="container">
+          <header className="app-header">
+            <h1>📝 My Notes</h1>
+            <p>Keep your thoughts organized</p>
+          </header>
 
-        {error && (
-          <div className="error-message">
-            {error}
-          </div>
-        )}
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
 
-        <NoteForm
-          editingNote={editingNote}
-          onCreateNote={handleCreateNote}
-          onUpdateNote={handleUpdateNote}
-          onCancelEdit={handleCancelEdit}
-        />
+          <NoteForm
+            editingNote={editingNote}
+            onCreateNote={handleCreateNote}
+            onUpdateNote={handleUpdateNote}
+            onCancelEdit={handleCancelEdit}
+          />
 
-        {loading ? (
-          <div className="loading">Loading notes...</div>
-        ) : notes.length === 0 ? (
-          <div className="empty-state">
-            <p>No notes yet. Create your first note above!</p>
-          </div>
-        ) : (
-          <div className="notes-grid">
-            {notes.map((note) => (
-              <NoteCard
-                key={note._id}
-                note={note}
-                onEdit={handleEditClick}
-                onDelete={handleDeleteNote}
-              />
-            ))}
-          </div>
-        )}
+          {loading ? (
+            <div className="loading">Loading notes...</div>
+          ) : notes.length === 0 ? (
+            <div className="empty-state">
+              <p>No notes yet. Create your first note above!</p>
+            </div>
+          ) : (
+            <div className="notes-grid">
+              {notes.map((note) => (
+                <NoteCard
+                  key={note._id}
+                  note={note}
+                  onEdit={handleEditClick}
+                  onDelete={handleDeleteNote}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

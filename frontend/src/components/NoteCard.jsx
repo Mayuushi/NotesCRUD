@@ -24,14 +24,14 @@ const NoteCard = ({ note, onEdit, onDelete }) => {
             onClick={() => onEdit(note)}
             aria-label="Edit note"
           >
-            ✏️
+            Edit
           </button>
           <button
             className="btn-delete"
             onClick={() => onDelete(note._id)}
             aria-label="Delete note"
           >
-            🗑️
+            Delete
           </button>
         </div>
       </div>

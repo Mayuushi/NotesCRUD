@@ -9,6 +9,21 @@ const api = axios.create({
   },
 });
 
+// Function to set auth token
+export const setAuthToken = (token) => {
+  if (token) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete api.defaults.headers.common['Authorization'];
+  }
+};
+
+// Load token from localStorage on startup
+const token = localStorage.getItem('token');
+if (token) {
+  setAuthToken(token);
+}
+
 export const getAllNotes = async () => {
   const response = await api.get('/notes');
   return response.data;

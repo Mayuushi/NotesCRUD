@@ -1,14 +1,16 @@
 # Notes CRUD App
 
-A full-stack web application for creating, reading, updating, and deleting notes. Built with Node.js/Express backend and React frontend.
+A full-stack web application for creating, reading, updating, and deleting notes. Built with Node.js/Express backend and React frontend. Features user authentication with JWT tokens.
 
 ## Features
 
+- User registration and login
 - Create new notes with title and content
-- View all notes
+- View all notes (user-specific)
 - Edit existing notes
 - Delete notes
 - Responsive design
+- JWT-based authentication
 
 ## Tech Stack
 
@@ -16,11 +18,14 @@ A full-stack web application for creating, reading, updating, and deleting notes
 - Node.js
 - Express.js
 - MongoDB
+- JWT (jsonwebtoken)
+- bcrypt (password hashing)
 - CORS
 
 ### Frontend
 - React
 - Vite
+- Axios
 - CSS
 
 ## Prerequisites
@@ -50,8 +55,7 @@ A full-stack web application for creating, reading, updating, and deleting notes
    ```
 
 4. Set up environment variables:
-   - Copy `.env.example` to `.env` in the backend directory (if available)
-   - Update the MongoDB URI and other variables as needed
+   - In `backend/.env`, update the MongoDB URI and JWT secret as needed
 
 5. Start the backend server:
    ```bash
@@ -69,7 +73,12 @@ A full-stack web application for creating, reading, updating, and deleting notes
 
 ## API Endpoints
 
-- `GET /api/notes` - Get all notes
+### Authentication
+- `POST /api/register` - Register a new user
+- `POST /api/login` - Login user
+
+### Notes (Protected)
+- `GET /api/notes` - Get all notes for authenticated user
 - `GET /api/notes/:id` - Get a specific note
 - `POST /api/notes` - Create a new note
 - `PUT /api/notes/:id` - Update a note
@@ -81,8 +90,15 @@ A full-stack web application for creating, reading, updating, and deleting notes
 notes-crud/
 ├── backend/
 │   ├── controller/
+│   │   ├── notesController.js
+│   │   └── userController.js
 │   ├── db/
+│   │   └── mongo.js
+│   ├── middleware/
+│   │   └── auth.js
 │   ├── routes/
+│   │   ├── notesRoutes.js
+│   │   └── userRoutes.js
 │   ├── .env
 │   ├── package.json
 │   ├── server.js
@@ -91,7 +107,13 @@ notes-crud/
 │   ├── public/
 │   ├── src/
 │   │   ├── components/
+│   │   │   ├── Login.jsx
+│   │   │   ├── NoteCard.jsx
+│   │   │   ├── NoteForm.jsx
+│   │   │   └── Register.jsx
 │   │   ├── services/
+│   │   │   ├── authService.js
+│   │   │   └── noteService.js
 │   │   ├── App.jsx
 │   │   └── main.jsx
 │   ├── package.json
@@ -99,6 +121,13 @@ notes-crud/
 │   └── README.md
 └── README.md
 ```
+
+## Usage
+
+1. Register a new account or login with existing credentials
+2. Create notes using the form at the top
+3. View, edit, or delete your notes in the grid below
+4. Logout when done
 
 ## Contributing
 

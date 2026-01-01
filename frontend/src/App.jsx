@@ -2,16 +2,27 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import NoteCard from './components/NoteCard';
 import NoteForm from './components/NoteForm';
-import { getAllNotes, createNote, updateNote, deleteNote } from './services/noteService';
+import Login from './components/Login';
+import Register from './components/Register';
+import { getAllNotes, createNote, updateNote, deleteNote, setAuthToken } from './services/noteService';
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [editingNote, setEditingNote] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   useEffect(() => {
-    fetchNotes();
+    const token = localStorage.getItem('token');
+    if (token) {
+      setAuthToken(token);
+      setIsLoggedIn(true);
+      fetchNotes();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const fetchNotes = async () => {
@@ -26,6 +37,24 @@ function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    fetchNotes();
+  };
+
+  const handleRegister = () => {
+    setIsLoggedIn(true);
+    fetchNotes();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setAuthToken(null);
+    setIsLoggedIn(false);
+    setNotes([]);
+    setEditingNote(null);
   };
 
   const handleCreateNote = async (noteData) => {
@@ -82,12 +111,31 @@ function App() {
     setEditingNote(null);
   };
 
+  if (!isLoggedIn) {
+    return (
+      <div className="App">
+        <div className="container">
+          <header className="app-header">
+            <h1>📝 My Notes</h1>
+            <p>Keep your thoughts organized</p>
+          </header>
+          <div className="auth-toggle">
+            <button onClick={() => setShowRegister(false)} className={!showRegister ? 'active' : ''}>Login</button>
+            <button onClick={() => setShowRegister(true)} className={showRegister ? 'active' : ''}>Register</button>
+          </div>
+          {showRegister ? <Register onRegister={handleRegister} /> : <Login onLogin={handleLogin} />}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="App">
       <div className="container">
         <header className="app-header">
           <h1>📝 My Notes</h1>
           <p>Keep your thoughts organized</p>
+          <button onClick={handleLogout} className="logout-btn">Logout</button>
         </header>
 
         {error && (

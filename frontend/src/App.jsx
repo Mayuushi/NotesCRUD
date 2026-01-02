@@ -118,7 +118,7 @@ function App() {
       <div className="App">
         <div className="container">
           <header className="app-header">
-            <h1>📝 My Notes</h1>
+            <h1>My Notes</h1>
             <p>Keep your thoughts organized</p>
           </header>
           <div className="auth-toggle">

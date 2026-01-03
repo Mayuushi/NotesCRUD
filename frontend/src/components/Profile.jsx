@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
-
 const Profile = () => {
     const [profile, setProfile] = useState({
         username: "",
         email: ""
     });
+
     const [currentPassword, setCurrentPassword] = useState("");
-const [newPassword, setNewPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
 
     useEffect(() => {
         axios.get("http://localhost:5000/api/users/profile", {
@@ -19,47 +18,51 @@ const [newPassword, setNewPassword] = useState("");
         }).then(res => setProfile(res.data));
     }, []);
 
-    const handleChange = e => {
+    const handleChange = (e) => {
         setProfile({ ...profile, username: e.target.value });
     };
 
     const saveProfile = async () => {
-        await axios.put(
-            "http://localhost:5000/api/users/profile",
-            { username: profile.username },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+        try {
+            await axios.put(
+                "http://localhost:5000/api/users/profile",
+                { username: profile.username },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
                 }
-            }
-        );
-        alert("Profile updated");
+            );
+            alert("Profile updated");
+        } catch (err) {
+            alert("Failed to update profile");
+        }
     };
+
     const handleChangePassword = async () => {
-    if (!currentPassword || !newPassword) {
-        alert("Please fill in all fields");
-        return;
-    }
+        if (!currentPassword || !newPassword) {
+            alert("Please fill in all fields");
+            return;
+        }
 
-    try {
-        await axios.put(
-            "http://localhost:5000/api/users/change-password",
-            { currentPassword, newPassword },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            }
-        );
+        try {
+            await axios.put(
+                "http://localhost:5000/api/users/change-password",
+                { currentPassword, newPassword },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
 
-        alert("Password changed successfully");
-        setCurrentPassword("");
-        setNewPassword("");
-    } catch (err) {
-        alert(err.response?.data?.message || "Failed to change password");
-    }
-};
-
+            alert("Password changed successfully");
+            setCurrentPassword("");
+            setNewPassword("");
+        } catch (err) {
+            alert(err.response?.data?.message || "Failed to change password");
+        }
+    };
 
     return (
         <div>
@@ -81,24 +84,23 @@ const [newPassword, setNewPassword] = useState("");
 
             <h3>Change Password</h3>
 
-<input
-    type="password"
-    placeholder="Current Password"
-    value={currentPassword}
-    onChange={(e) => setCurrentPassword(e.target.value)}
-/>
+            <input
+                type="password"
+                placeholder="Current Password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+            />
 
-<input
-    type="password"
-    placeholder="New Password"
-    value={newPassword}
-    onChange={(e) => setNewPassword(e.target.value)}
-/>
+            <input
+                type="password"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+            />
 
-<button onClick={handleChangePassword}>
-    Change Password
-</button>
-
+            <button onClick={handleChangePassword}>
+                Change Password
+            </button>
         </div>
     );
 };

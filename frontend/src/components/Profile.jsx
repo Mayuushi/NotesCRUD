@@ -61,50 +61,84 @@ const Profile = () => {
   };
 
   return (
-    <div>
-      <h2>My Profile</h2>
+    <div className="profile-container">
+      <div className="profile-content">
+        <h2 className="profile-title">My Profile</h2>
 
-      <p><strong>Username:</strong> {profile.username}</p>
-      <p><strong>Email:</strong> {profile.email}</p>
-
-      <button onClick={() => setShowModal(true)}>Edit Profile</button>
-
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>Edit Profile</h3>
-
-            <label>Username</label>
-            <input
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-
-            <hr />
-
-            <h4>Change Password (optional)</h4>
-
-            <input
-              type="password"
-              placeholder="Current Password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-            />
-
-            <input
-              type="password"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-
-            <div className="form-actions">
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-              <button onClick={saveProfile}>Save</button>
-            </div>
+        <div className="profile-info">
+          <div className="profile-field">
+            <span className="field-label">Username:</span>
+            <span className="field-value">{profile.username}</span>
+          </div>
+          <div className="profile-field">
+            <span className="field-label">Email:</span>
+            <span className="field-value">{profile.email}</span>
           </div>
         </div>
-      )}
+
+        <button 
+          onClick={() => setShowModal(true)}
+          className="edit-button"
+        >
+          Edit Profile
+        </button>
+
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h3 className="modal-title">Edit Profile</h3>
+
+              <div className="form-group">
+                <label className="form-label">Username</label>
+                <input
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="form-input"
+                />
+              </div>
+
+              <hr className="divider" />
+
+              <h4 className="section-title">Change Password (optional)</h4>
+
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="Current Password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="New Password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-actions">
+                <button 
+                  onClick={() => setShowModal(false)}
+                  className="cancel-button"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={saveProfile}
+                  className="save-button"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

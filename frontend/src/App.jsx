@@ -25,7 +25,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
-  // 🔹 NEW: page state
   const [activePage, setActivePage] = useState('notes');
 
   useEffect(() => {
@@ -172,10 +171,6 @@ function App() {
 
       <div className="main-content">
         <div className="container">
-          <header className="app-header">
-            <h1>📝 My Notes</h1>
-            <p>Keep your thoughts organized</p>
-          </header>
 
           {error && <div className="error-message">{error}</div>}
 

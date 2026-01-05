@@ -1,108 +1,112 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "./Profile.css";
 
 const Profile = () => {
-    const [profile, setProfile] = useState({
-        username: "",
-        email: ""
-    });
+  const [profile, setProfile] = useState({ username: "", email: "" });
 
-    const [currentPassword, setCurrentPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-    useEffect(() => {
-        axios.get("http://localhost:5000/api/users/profile", {
+  const [username, setUsername] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  // FETCH PROFILE
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/users/profile", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        setProfile(res.data);
+        setUsername(res.data.username);
+      });
+  }, []);
+
+  // SAVE PROFILE (USERNAME + PASSWORD)
+  const saveProfile = async () => {
+    try {
+      await axios.put(
+        "http://localhost:5000/api/users/profile",
+        { username },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (currentPassword && newPassword) {
+        await axios.put(
+          "http://localhost:5000/api/users/change-password",
+          { currentPassword, newPassword },
+          {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        }).then(res => setProfile(res.data));
-    }, []);
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+      }
 
-    const handleChange = (e) => {
-        setProfile({ ...profile, username: e.target.value });
-    };
+      alert("Profile updated");
+      setShowModal(false);
+      setCurrentPassword("");
+      setNewPassword("");
+      setProfile({ ...profile, username });
+    } catch (err) {
+      alert(err.response?.data?.message || "Update failed");
+    }
+  };
 
-    const saveProfile = async () => {
-        try {
-            await axios.put(
-                "http://localhost:5000/api/users/profile",
-                { username: profile.username },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
-            );
-            alert("Profile updated");
-        } catch (err) {
-            alert("Failed to update profile");
-        }
-    };
+  return (
+    <div>
+      <h2>My Profile</h2>
 
-    const handleChangePassword = async () => {
-        if (!currentPassword || !newPassword) {
-            alert("Please fill in all fields");
-            return;
-        }
+      <p><strong>Username:</strong> {profile.username}</p>
+      <p><strong>Email:</strong> {profile.email}</p>
 
-        try {
-            await axios.put(
-                "http://localhost:5000/api/users/change-password",
-                { currentPassword, newPassword },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                }
-            );
+      <button onClick={() => setShowModal(true)}>Edit Profile</button>
 
-            alert("Password changed successfully");
-            setCurrentPassword("");
-            setNewPassword("");
-        } catch (err) {
-            alert(err.response?.data?.message || "Failed to change password");
-        }
-    };
-
-    return (
-        <div>
-            <h2>My Profile</h2>
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Edit Profile</h3>
 
             <label>Username</label>
             <input
-                value={profile.username}
-                onChange={handleChange}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
 
-            <label>Email</label>
-            <input
-                value={profile.email}
-                disabled
-            />
+            <hr />
 
-            <button onClick={saveProfile}>Save</button>
-
-            <h3>Change Password</h3>
+            <h4>Change Password (optional)</h4>
 
             <input
-                type="password"
-                placeholder="Current Password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
+              type="password"
+              placeholder="Current Password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
             />
 
             <input
-                type="password"
-                placeholder="New Password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
             />
 
-            <button onClick={handleChangePassword}>
-                Change Password
-            </button>
+            <div className="form-actions">
+              <button onClick={() => setShowModal(false)}>Cancel</button>
+              <button onClick={saveProfile}>Save</button>
+            </div>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default Profile;
